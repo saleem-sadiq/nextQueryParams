@@ -13,8 +13,8 @@ const sizeVariants = ["xs", "s", "md", "lg", "xl"];
 const page = ({ searchParams }: {
     searchParams: { [key: string]: string | string[] | undefined }
 }) => {
-    const selectedColor = (searchParams.color || "black") as string;
-    const selectedSize = (searchParams.size || "md") as string;
+    const selectedColor = (colorVariants.some((color) => searchParams.color === color) ? searchParams.color : "black") as string;
+    const selectedSize = (sizeVariants.some((size) => searchParams.size == size) ? searchParams.size : "md") as string;
 
     return (
         <div className="flex justify-center items-center w-full min-h-screen bg-slate-300">
@@ -33,16 +33,19 @@ const page = ({ searchParams }: {
                     <h2 className="p-2 rounded-3xl bg-blue-500 w-28 text-center mt-5">$200 USD</h2>
                     <h2 className="my-5 text-xl font-semibold">Color</h2>
                     {colorVariants.map((color, index) => (
-                        <Link 
-                        // We use this type of href because if we have special charachter in our query params then we go for this
-                        href={`?${new URLSearchParams({
-                            color,
-                            size: selectedSize,
-                        })}`} key={index} className={`px-5 py-2 rounded-3xl bg-slate-200 w-28 text-center mt-5 mx-2 border-2 ${selectedColor === color ? "border-blue-500" : "border-white"}`}>{color}</Link>
+                        <Link
+                            replace
+                            // We use this type of href because if we have special charachter in our query params then we go for this
+                            href={`?${new URLSearchParams({
+                                color,
+                                size: selectedSize,
+                            })}`} key={index} className={`px-5 py-2 rounded-3xl bg-slate-200 w-28 text-center mt-5 mx-2 border-2 ${selectedColor === color ? "border-blue-500" : "border-white"}`}>{color}</Link>
                     ))}
                     <h2 className="my-5 text-xl font-semibold">Size</h2>
                     {sizeVariants.map((size, index) => (
-                        <Link href={`?${new URLSearchParams({
+                        <Link
+                            replace
+                        href={`?${new URLSearchParams({
                             color: selectedColor,
                             size,
                         })}`} key={index} className={`px-5 py-2 rounded-3xl bg-slate-200 w-28 text-center mt-5 mx-2 border-2 ${selectedSize === size ? "border-blue-500" : "border-white"}`}>{size}</Link>
